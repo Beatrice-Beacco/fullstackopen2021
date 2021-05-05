@@ -1,0 +1,14 @@
+BROWSER->SERVER: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+SERVER->BROWSER: HTML-code
+BROWSER->SERVER: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+SERVER->BROWSER: main.css
+BROWSER->SERVER: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+SERVER->BROWSER: spa.js
+
+Start of note
+The HTML, CSS and JavaScript components of the page are requested.
+spa.js will request the raw .json file of the notes.
+End of note
+
+BROWSER->SERVER: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+SERVER->BROWSER: data.json

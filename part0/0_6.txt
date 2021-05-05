@@ -1,0 +1,10 @@
+BROWSER->SERVER: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+SERVER->BROWSER: HTTP STATUS CODE 201
+
+Start of note
+Only a single request, as a single page app it doesn't need to reload
+the whole page. 
+The POST request contains the new note as JSON data.
+The browser responds with a status code of 201, wich doesn't need to 
+reload the app.
+End of note

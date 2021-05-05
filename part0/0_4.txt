@@ -1,0 +1,29 @@
+BROWSER->SERVER: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+SERVER->BROWSER: HTTP STATUS CODE 302 Location: /notes
+
+Start of note
+The server asks the browser to do a new HTTP GET request to the location 
+specified in the response header.
+End of note
+
+BROWSER->SERVER: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+SERVER->BROWSER: HTML-code
+
+Start of note
+This operation will cause the page to reload, thus the next requests will
+ask the server to send the HTML, css and javascript components. 
+End of note
+
+BROWSER->SERVER: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+SERVER->BROWSER: main.css
+BROWSER->SERVER: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+SERVER->BROWSER: main.js
+BROWSER->SERVER: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+SERVER->BROWSER: HTML-code
+
+Start of note
+Also, the raw .json data of the notes will be requested by main.js
+End of note
+
+BROWSER->SERVER: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+SERVER->BROWSER: data.json
