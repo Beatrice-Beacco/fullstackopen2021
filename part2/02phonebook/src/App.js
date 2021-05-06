@@ -57,7 +57,7 @@ const updateList = (event) => {
 const searchList = () => {
   let searched = document.getElementById("search").value
   let results = persons.filter((element)=>{
-   return (element['name'].search(searched) > -1) ? true : false
+   return (element['name'].search(searched) > -1) ? true : false //(i know this notation is useless but I wanted to use it atleast once in my life lmao)
   })
   return setSearchResults(results)
 }
