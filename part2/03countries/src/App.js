@@ -11,7 +11,7 @@ const [query, setQuery] = useState([]);
 const [showCountry, setShowCountry] = useState([])
 const [weather, setWeather] = useState([]);
 console.log("Weather",weather);
-console.log(weather.success)
+console.log(showCountry)
 
 //Get data from API and sets it to the variable countries
 const hook = () => {
@@ -36,14 +36,24 @@ const weather_hook = () => {
     })
 }
 
-useEffect(weather_hook, [])
+useEffect(weather_hook, [showCountry])
+
+//If there is only one country in the query, else resets showCountry
+  const hook_country = () => {
+        if(query.length==1){
+          setShowCountry(query[0])
+        } else {
+          setShowCountry([])
+        }
+      }
+  
+  useEffect(hook_country, [query])
 
 //Renders the components
   return ( // 
     <div>
       Search countries: <SearchField stateHandler={setQuery} database={countries} />
-      <Results query={query} countryHandler={setShowCountry}/>
-      <FullCountry country={showCountry} weather={weather}/>
+      <Results query={query} countryHandler={setShowCountry} countryState={showCountry} weatherState={weather}/>
     </div>
   );
 
@@ -73,16 +83,17 @@ const updateSearch = (sh, id, database) => {
 
 
 //Calls the componets to render the results bases on the number of elements in the search result (query) array
-const Results = ({query, countryHandler}) =>{
+const Results = ({ query, countryHandler, countryState, weatherState}) =>{
   if(query.length <= 10) { //If the length of the list equals or is less than 10
   if (query.length == 1) { //And if it's exacyly one
-      setInfo(query[0], countryHandler) //sets it as the showCountry state so it can be rendered by the FullCountry component
-    return (null)
+     //sets it as the showCountry state so it can be rendered by the FullCountry component
+    return (<><FullCountry country={countryState} weather={weatherState} /></>)
         } else { //If it's more than one calls the component to render a list
-    return (<><CountryList list={query} handler={countryHandler}/></>)
+    return (<><CountryList list={query} handler={countryHandler}/>
+              <FullCountry country={countryState} weather={weatherState} /></>)
   } 
   } else { //If it's more than then
-    return(<div>Too many countries! Narrow your search</div>) //Alert the user there are too many possible results
+    return (<div>Too many countries! Narrow your search</div>) //Alert the user there are too many possible results
 }
 }
 
@@ -134,7 +145,7 @@ const FullCountry = ({country, weather}) => {
 
 //If the API call is successful renders the weather data
 const Weather = ({place, weatherRes}) => {
-  if (weatherRes.success==true) {
+  if (weatherRes.success) {
   return(
   <div>
     <h2>Weather in {place.name}</h2>
