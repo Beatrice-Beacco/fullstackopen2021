@@ -10,15 +10,12 @@ const [countries, setCountries] = useState([])
 const [query, setQuery] = useState([]);
 const [showCountry, setShowCountry] = useState([])
 const [weather, setWeather] = useState([]);
-console.log("Weather",weather);
-console.log(showCountry)
 
 //Get data from API and sets it to the variable countries
 const hook = () => {
   axios
     .get('https://restcountries.eu/rest/v2/all')
     .then(response => {
-      console.log("Countries response", response);
       setCountries(response.data)
     })
 }
@@ -27,11 +24,9 @@ useEffect(hook, [])
 
 //Gets weather data
 const weather_hook = () => {
-  console.log('http://api.weatherstack.com/current?access_key=' + api_key + '&query=' + showCountry.name + '\'')
   axios
     .get('http://api.weatherstack.com/current?access_key=' + api_key + '&query=' + showCountry.name + '\'')
     .then(response => {
-      console.log(response);
       setWeather(response.data)
     })
 }
@@ -54,6 +49,7 @@ useEffect(weather_hook, [showCountry])
     <div>
       Search countries: <SearchField stateHandler={setQuery} database={countries} />
       <Results query={query} countryHandler={setShowCountry} countryState={showCountry} weatherState={weather}/>
+      <FullCountry country={showCountry} weather={weather}/>
     </div>
   );
 
@@ -83,18 +79,14 @@ const updateSearch = (sh, id, database) => {
 
 
 //Calls the componets to render the results bases on the number of elements in the search result (query) array
-const Results = ({ query, countryHandler, countryState, weatherState}) =>{
-  if(query.length <= 10) { //If the length of the list equals or is less than 10
-  if (query.length == 1) { //And if it's exacyly one
-     //sets it as the showCountry state so it can be rendered by the FullCountry component
-    return (<><FullCountry country={countryState} weather={weatherState} /></>)
-        } else { //If it's more than one calls the component to render a list
-    return (<><CountryList list={query} handler={countryHandler}/>
-              <FullCountry country={countryState} weather={weatherState} /></>)
-  } 
-  } else { //If it's more than then
+const Results = ({ query, countryHandler}) =>{
+  if (query.length > 1 && query.length <= 10) { //If the length of the list is between 2 and 10 renders the list
+    return (<><CountryList list={query} handler={countryHandler}/></>)
+  } else if (query.length > 10) { //If it's more than 10
     return (<div>Too many countries! Narrow your search</div>) //Alert the user there are too many possible results
-}
+  } else { //If the length is 0 or 1 renders nothing
+    return(null)
+  }
 }
 
 //Renders the list of possible countries searched and the respective button
