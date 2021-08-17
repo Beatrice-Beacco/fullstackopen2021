@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 
 //Import my components
 import Numbers from './components/Numbers'
@@ -6,16 +7,22 @@ import FoundResults from './components/FoundResults'
 import Field from './components/Field'
 
 const App = () => {
+
 //States
-const [persons, setPersons] = useState([
-  { name: 'Arto Hellas', number: '040-123456' },
-  { name: 'Ada Lovelace', number: '39-44-5323523' },
-  { name: 'Dan Abramov', number: '12-43-234345' },
-  { name: 'Mary Poppendieck', number: '39-23-6423122' }
-]) //list of total entries
+const [persons, setPersons] = useState([]) //list of total entries
 const [newName, setNewName] = useState('') //name input field
 const [newNumber, setNewNumber] = useState('') //number input field
 const [searchResults, setSearchResults] = useState([]) //search input field
+
+//Fetches the data from db.json as sets it as the persons state
+const hook = () => {
+  axios
+    .get("http://localhost:3001/persons")
+    .then(response =>
+      setPersons(response.data))
+}
+
+useEffect(hook,[])
 
 //Receives the event to use preventDefault, the function to change the desired state
 //and the ID of the field to get the user imput
