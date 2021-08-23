@@ -59,7 +59,7 @@ useEffect(weather_hook, [showCountry])
 const SearchField = ({stateHandler, database}) => {
   return(
     <>
-      <input id='search' onChange={()=>updateSearch(stateHandler, 'search', database)} />
+      <input id='search' onChange={(e)=>updateSearch(e, stateHandler, 'search', database)} />
     </>
   )
 }
@@ -67,7 +67,8 @@ const SearchField = ({stateHandler, database}) => {
 //Arguments: stateHandler for the query state, the id of the search field, list of contries
 //Gets the text of the input field and filters the database with the input. The result is then set as the query state
 //thanks to the event handler
-const updateSearch = (sh, id, database) => {
+const updateSearch = (ev, sh, id, database) => {
+  ev.preventDefault()
   let searched = document.getElementById(id).value;
   let queryResult = database.filter((country) => {
       return country.name.search(searched) >= 0
