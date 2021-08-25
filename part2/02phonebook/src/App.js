@@ -8,6 +8,7 @@ import numberService from './services/numbers.js'
 import Numbers from './components/Numbers'
 import FoundResults from './components/FoundResults'
 import Field from './components/Field'
+import Message from './components/Message'
 
 const App = () => {
 
@@ -16,6 +17,7 @@ const [persons, setPersons] = useState([]) //list of total entries
 const [newName, setNewName] = useState('') //name input field
 const [newNumber, setNewNumber] = useState('') //number input field
 const [searchResults, setSearchResults] = useState([]) //search input field
+const [notification, setNotification] = useState('') //notification to display if something is added/there's an error
 
 //Fetches the data from db.json as sets it as the persons state
 const hook = () => {
@@ -23,8 +25,6 @@ const hook = () => {
 }
 
 useEffect(hook,[])
-
-console.log(persons);
 
 //Receives the event to use preventDefault, the function to change the desired state
 //and the ID of the field to get the user imput
@@ -39,13 +39,24 @@ const addNew = (event, handleState, id) => {
 //Receives the event object (to prevent the reload of the page) and the id of the entry to delete
 //Makes a request to delete the entry, then makes a request to receive the updated list from the database
 //And sets it as the persons state
-const deleteEntry = (event, id) =>{
+const deleteEntry = (event, id, name) =>{
   event.preventDefault()
   numberService.deleteNumber(id)
   .then(()=>{
     numberService.getAll()
     .then((list)=> setPersons(list))
   })
+  .catch(()=>updateMessage([name + ' was already deleted from the server', 'red'])) //If there's an error that means that the number is not present and updates the notification accordingly
+}
+
+//Takes the message array as an argument
+//Sets the notification state with the passed argument
+//Returns a timeout that sets the notification with an empty message after 5 seconds
+const updateMessage = (message) => {
+  setNotification(message)
+  return (setTimeout(() => {
+    setNotification('')
+  }, 5000))
 }
 
 
@@ -70,13 +81,15 @@ const updateList = (event) => {
           numberService.update(personSearch.id, updatedEntry)
           .then(() => numberService.getAll()) //Fetches the updated data
           .then((updatedList) => setPersons(updatedList)) //And updates the persons state
+          .then(updateMessage(['Updated ' + newName, 'green'])) ////calls the function updateMessage and passes the update notification
         }
       } else {
       const newId = persons.reduce((biggest, element)=>{ //Calculates the largest id so we can set the biggest number +1 to avoid duplicates
-        console.log(biggest);
         return(Math.max(biggest, element.id))}, 0)
       const newEntry = { 'name': newName, 'number': newNumber, 'id': newId+1}
-      numberService.create(newEntry).then(addedNumber => setPersons([...persons, addedNumber]))
+      numberService.create(newEntry) //creates the new entry
+      .then(addedNumber => setPersons([...persons, addedNumber])) //and updates the state with the database
+      .then(updateMessage(['Added '+ newName, 'green'])) //calls the function updateMessage and passes the add notification
       }
     } else { //If both fields arenot set alerts the user
       return (window.alert('Please, complete both fields!'))
@@ -98,6 +111,7 @@ const searchList = () => {
   return (
     <div>
       <center><h1>Phonebook</h1></center>
+      <Message state={notification}/>
       <h2>Search</h2>
       <input id="search" onChange={searchList}/><br/>
       Results: {<FoundResults results={searchResults}/>}

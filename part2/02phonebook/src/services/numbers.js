@@ -12,16 +12,14 @@ const create = newObject => {
 }
 
 const update = (id, newObject) => {
-    console.log("Oggetto da sostituire", newObject);
     const request = axios.put(baseUrl + '/' + id, newObject)
     return request.then(response => response.data)
 }
 
+//Deletes the number and returns the updated database
 const deleteNumber = id => {
     const request = axios.delete(`${baseUrl}/${id}`)
     const updates = request.then(getAll)
-    
-    console.log('Ud',updates);
     return updates
 }
 

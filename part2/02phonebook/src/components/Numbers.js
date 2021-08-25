@@ -7,7 +7,7 @@ const Numbers = ({list, handler}) => {
             {list.map((entry) => {
                 return (
                     <li key={entry.id}>
-                        {entry.name} - Number: {entry.number} <button onClick={(e)=>handler(e, entry.id)}>Delete</button>
+                        {entry.name} - Number: {entry.number} <button onClick={(e)=>handler(e, entry.id, entry.name)}>Delete</button>
                     </li>)
             })}
         </div>
