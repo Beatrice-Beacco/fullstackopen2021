@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 
 //Import my module
 import numberService from './services/numbers.js'
@@ -58,8 +57,6 @@ const updateMessage = (message) => {
     setNotification('')
   }, 5000))
 }
-
-
 
 //Searches the array with find to see if the user input set in newName aldready exists
 //in the array
