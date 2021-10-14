@@ -2,9 +2,17 @@ const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
 
+//Gets and populates
+usersRouter.get('/', async (request, response) => {
+    const users = await User
+        .find({}).populate('blogs')
+
+    response.json(users)
+})
+
 //Saves a new user that adheres to the parameters, else returns status 400
 //and an error
-usersRouter.post('/', async (request, response) => {
+usersRouter.post('/', async (request, response, next) => {
     const body = request.body
 
     const saltRounds = 10
@@ -20,9 +28,7 @@ usersRouter.post('/', async (request, response) => {
     const savedUser = await user.save()
     response.json(savedUser)
     } catch (err) {
-    response
-    .status(400)
-    .json({ "error": "Username and Password missing or shorter than 3 characters" })
+    next(err)
     }
 })
 

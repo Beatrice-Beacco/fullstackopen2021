@@ -28,7 +28,7 @@ blogsRouter.put('/:id', async (request, response) => {
 //Defines the get request. Uses the blog schema to get all the notes
 //Async/await syntax
 blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog.find({})
+    const blogs = await Blog.find({}).populate('users')
     response.json(blogs)
 })
 

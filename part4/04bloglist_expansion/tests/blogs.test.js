@@ -9,7 +9,6 @@ const api = supertest(app)
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    console.log(helper.initialBlogs);
     await Blog.insertMany(helper.initialBlogs)
 })
 
