@@ -50,6 +50,9 @@ blogsRouter.post('/', async (request, response) => {
 
     const token = getTokenFrom(request)
 
+    console.log(token);
+    console.log(process.env.SECRET);
+
     const decodedToken = jwt.verify(token, process.env.SECRET)
 
     console.log("dentro");
