@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer $2b$10$e3ptzTboc22KYdfBJf97pOBMPOQwHwXt2/FV8sLr6GRoi4leDwpt2
+Authorization: bearer $2b$10$e3ptzTboc22KYdfBJf97pOBMPOQwHwXt2/FV8sLr6GRoi4leDwpt2
 
 {
     "title": "Blog Auth",

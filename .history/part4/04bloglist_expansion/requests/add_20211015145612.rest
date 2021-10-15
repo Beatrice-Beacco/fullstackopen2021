@@ -7,4 +7,5 @@ Authorization: Bearer $2b$10$e3ptzTboc22KYdfBJf97pOBMPOQwHwXt2/FV8sLr6GRoi4leDwp
     "author": "Idk lol",
     "url": "prova.net",
     "likes": 0,
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik51b3ZvIiwiaWQiOiI2MTY5NmYwZTVjMDM4NTM5NDcyMWE2OGUiLCJpYXQiOjE2MzQzMDIzNjksImV4cCI6MTYzNDMwNTk2OX0.jR_ES9mKluFnHFJH3DrSxexWAYrnnz2vAu5cDD1TxaE"
 }

@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik51b3ZvIiwiaWQiOiI2MTY5NmYwZTVjMDM4NTM5NDcyMWE2OGUiLCJpYXQiOjE2MzQzMDI4NTgsImV4cCI6MTYzNDMwNjQ1OH0.RgLfE4gd31o1-hdZ4WvQ2ysgBg47BHGsWrFmSD3uoGY
+
+{
+    "title": "Blog Auth",
+    "author": "Idk lol",
+    "url": "prova.net",
+    "likes": 0,
+}

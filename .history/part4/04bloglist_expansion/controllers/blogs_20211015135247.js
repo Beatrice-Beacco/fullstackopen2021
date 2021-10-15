@@ -1,9 +1,6 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 require('express-async-errors')
-const jwt = require('jsonwebtoken')
-
-
 
 //Deletes an entry based on the id
 blogsRouter.delete('/:id', async (request, response) => {
@@ -35,48 +32,11 @@ blogsRouter.get('/', async (request, response) => {
     response.json(blogs)
 })
 
-const getTokenFrom = request => {
-    const authorization = request.get('Authorization')
-    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-        return authorization.substring(7)
-    }
-    return null
-}
-
 //Defines the post request using the blog schema
 //Async/await syntax
 blogsRouter.post('/', async (request, response) => {
-    const body = request.body
-
-    const token = getTokenFrom(request)
-
-    console.log(token);
-
-    const decodedToken = jwt.verify(token, process.env.SECRET)
-
-    console.log(decodedToken);
-
-    if (!token || !decodedToken.id) {
-        return response.status(401).json({ error: 'token missing or invalid' })
-    }
-
-
-
-    const user = await User.findById(decodedToken.id)
-
-    const blog = new Blog({
-        title: body.title,
-        author: body.author,
-        url: body.url,
-        likes: body.likes,
-        users: user._id
-    })
-
+    const blog = new Blog(request.body)
     const newEntry = await blog.save()
-
-    user.blogs = user.blogs.concat(newEntry._id)
-    await user.save()
-
     response.status(201).json(newEntry)
 })
 
