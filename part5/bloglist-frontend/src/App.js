@@ -10,6 +10,11 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
+  //New blog states
+  const [title, setTitle] = useState()
+  const [author, setAuthor] = useState()
+  const [url, setUrl] = useState()
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
@@ -33,6 +38,8 @@ const App = () => {
     try {
       const user = await loginService.login({ username, password, })
 
+      blogService.setToken(user.token)
+
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
@@ -52,6 +59,19 @@ const App = () => {
     event.preventDefault()
     window.localStorage.clear()
     setUser(null)
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const newBlog = {
+      title: title,
+      author: author,
+      url: url
+    }
+
+    console.log(newBlog);
+
+    blogService.create(newBlog)
   }
 
   ///////////Helper Functions
@@ -77,7 +97,18 @@ const App = () => {
   const loggedForm = () => {
     return (
       <div>
+      <form onSubmit={handleSubmit}>
         Logged as {user.username} <button onClick={(e) => handleLogout(e)}>Logout</button>
+        <br/>
+        <h2>Create new</h2>
+        Title: <input type="text" value={title} name="Title"
+          onChange={({ target }) => setTitle(target.value)} /> <br/>
+        Author: <input type="text" value={author} name="Author"
+          onChange={({ target }) => setAuthor(target.value)} /> <br />
+        Url: <input type="text" value={url} name="Url"
+          onChange={({ target }) => setUrl(target.value)} /> <br />
+        <button type="submit">Submit</button>
+      </form>
       </div>
     )
   }
@@ -85,7 +116,7 @@ const App = () => {
   //Contitionally renders the helper functions
   return (
     <div>
-      <h2>blogs</h2>
+      <h1>Blogs</h1>
       { errorMessage}
 
       {user === null ?
