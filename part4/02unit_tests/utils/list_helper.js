@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const dummy = (blogs) => {
     return 1
 }
@@ -32,8 +34,56 @@ const favoriteBlogs = (blogs) => {
     return formatted
 }
 
+const mostBlogs = blogs => {
+    let entry = []
+    let maxBlogs = 0
+
+    blogs.forEach(blog => {
+        if (blog.blogs > maxBlogs) {
+            maxBlogs = blog.blogs
+            entry = blog
+        }
+    })
+
+    const formatted = {
+        author: entry.author,
+        blogs: entry.blogs
+    }
+
+    return formatted
+}
+
+const mostLikes = blogs => {
+
+    let authorArray = []
+    
+    blogs.forEach(blog => {
+       authorArray[blog.author] = 0 
+    })
+
+    blogs.forEach(blog => {
+        return authorArray[blog.author] += blog.likes
+    })
+
+    const likesArray = Object.values(authorArray)
+    const authors = Object.keys(authorArray)
+    console.log(authors);
+
+    const maxLikes = _.max(likesArray)
+    const author = authors[_.findIndex(likesArray, (e) => e == maxLikes)]
+
+    const formatted = {
+        author: author,
+        likes: maxLikes
+    }
+
+    return formatted
+}
+
 module.exports = {
     dummy,
     totalLikes,
-    favoriteBlogs
+    favoriteBlogs,
+    mostBlogs,
+    mostLikes
 }
