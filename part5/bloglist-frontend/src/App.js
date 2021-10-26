@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -19,7 +20,7 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
     )
-  }, [])
+  }, [user])
 
   //If there is a local storage for user then it is set as the user state
   useEffect(() => {
@@ -47,8 +48,11 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setErrorMessage(['Logged in succesfully', 'green'])
+      setTimeout(() => { setErrorMessage(null) },
+        5000)
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setErrorMessage(['Wrong credentials', 'red'])
       setTimeout(() => { setErrorMessage(null) },
         5000)
     }
@@ -63,15 +67,22 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    const newBlog = {
-      title: title,
-      author: author,
-      url: url
+
+    try {
+      const newBlog = {
+        title: title,
+        author: author,
+        url: url
+      }
+
+      blogService.create(newBlog)
+
+      setErrorMessage(['You created a new blog ' + newBlog.title, 'green'])
+      setTimeout(() => { setErrorMessage(null) }, 5000)
+    } catch (err) {
+      setErrorMessage(['An error occurred creating the blog: ' + err.message, 'red'])
+      setTimeout(() => { setErrorMessage(null) }, 5000)
     }
-
-    console.log(newBlog);
-
-    blogService.create(newBlog)
   }
 
   ///////////Helper Functions
@@ -97,18 +108,18 @@ const App = () => {
   const loggedForm = () => {
     return (
       <div>
-      <form onSubmit={handleSubmit}>
-        Logged as {user.username} <button onClick={(e) => handleLogout(e)}>Logout</button>
-        <br/>
-        <h2>Create new</h2>
+        <form onSubmit={handleSubmit}>
+          Logged as {user.username} <button onClick={(e) => handleLogout(e)}>Logout</button>
+          <br />
+          <h2>Create new</h2>
         Title: <input type="text" value={title} name="Title"
-          onChange={({ target }) => setTitle(target.value)} /> <br/>
+            onChange={({ target }) => setTitle(target.value)} /> <br />
         Author: <input type="text" value={author} name="Author"
-          onChange={({ target }) => setAuthor(target.value)} /> <br />
+            onChange={({ target }) => setAuthor(target.value)} /> <br />
         Url: <input type="text" value={url} name="Url"
-          onChange={({ target }) => setUrl(target.value)} /> <br />
-        <button type="submit">Submit</button>
-      </form>
+            onChange={({ target }) => setUrl(target.value)} /> <br />
+          <button type="submit">Submit</button>
+        </form>
       </div>
     )
   }
@@ -117,7 +128,7 @@ const App = () => {
   return (
     <div>
       <h1>Blogs</h1>
-      { errorMessage}
+      <Notification message={errorMessage} />
 
       {user === null ?
         loginForm() :
