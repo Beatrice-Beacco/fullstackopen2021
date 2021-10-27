@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react'
+
+//Import components
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
+import LoggedForm from './components/LoggedForm'
+import Toggable from './components/Toggable'
+
+//Import services
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -17,10 +24,13 @@ const App = () => {
   const [url, setUrl] = useState()
 
   useEffect(() => {
+    if (user) {
+      blogService.setToken(user.token)
+    }
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
     )
-  }, [user])
+  }, [[], user])
 
   //If there is a local storage for user then it is set as the user state
   useEffect(() => {
@@ -89,37 +99,32 @@ const App = () => {
 
   const loginForm = () => {
     return (
-      <form onSubmit={handleLogin}>
-        <div>
-          Username
-                   <input type="text" value={username} name="Username"
-            onChange={({ target }) => setUsername(target.value)} />
-        </div>
-        <div>
-          Password
-                   <input type="password" value={password} name="Password"
-            onChange={({ target }) => setPassword(target.value)} />
-        </div>
-        <button type="submit">Login</button>
-      </form>
+      <LoginForm handleSubmit={handleLogin}
+        handleUsernameChange={({ target }) => setUsername(target.value)}
+        handlePasswordChange={({ target }) => setPassword(target.value)}
+        username={username}
+        password={password}
+      />
     )
   }
 
   const loggedForm = () => {
     return (
       <div>
-        <form onSubmit={handleSubmit}>
-          Logged as {user.username} <button onClick={(e) => handleLogout(e)}>Logout</button>
-          <br />
-          <h2>Create new</h2>
-        Title: <input type="text" value={title} name="Title"
-            onChange={({ target }) => setTitle(target.value)} /> <br />
-        Author: <input type="text" value={author} name="Author"
-            onChange={({ target }) => setAuthor(target.value)} /> <br />
-        Url: <input type="text" value={url} name="Url"
-            onChange={({ target }) => setUrl(target.value)} /> <br />
-          <button type="submit">Submit</button>
-        </form>
+        Logged as {user.username} < button onClick={(e) => handleLogout(e)} > Logout</button >
+        <br />
+        <br />
+        <Toggable buttonLabel="Create a new blog">
+          <LoggedForm handleSubmit={handleSubmit}
+            handleTitle={({ target }) => setTitle(target.value)}
+            handleAuthor={({ target }) => setAuthor(target.value)}
+            handleUrl={({ target }) => setUrl(target.value)}
+            title={title}
+            author={author}
+            url={url}
+          />
+        </Toggable>
+        <br />
       </div>
     )
   }
