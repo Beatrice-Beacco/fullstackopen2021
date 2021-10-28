@@ -18,7 +18,7 @@ const Blog = ({ blog }) => {
   const shownInfo = () => {
     return (
       <>
-        <button onClick={() => setToggle(false)}>Hide</button><br />
+        <button onClick={() => setToggle(false)}>Hide</button>
     Url: { blog.url} <br />
     Likes: { blog.likes} <button>Like</button><br />
     Author: { blog.users.author} <br />
@@ -36,7 +36,7 @@ const Blog = ({ blog }) => {
 
   return (
     <div style={blogStyle}>
-      {blog.title} {blog.author}
+      {blog.title} {blog.author}<br />
       {toggle === false ?
         toggleInfo() :
         shownInfo()

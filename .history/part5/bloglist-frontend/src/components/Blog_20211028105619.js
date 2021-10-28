@@ -18,7 +18,7 @@ const Blog = ({ blog }) => {
   const shownInfo = () => {
     return (
       <>
-        <button onClick={() => setToggle(false)}>Hide</button><br />
+        <button onClick={() => setToggle(false)}>Hide</button>
     Url: { blog.url} <br />
     Likes: { blog.likes} <button>Like</button><br />
     Author: { blog.users.author} <br />
