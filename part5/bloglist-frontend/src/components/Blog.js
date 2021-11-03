@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from 'react'
 import Toggable from './Toggable'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, user }) => {
+
+  console.log(blog);
+  console.log(user);
 
   const [toggle, setToggle] = useState(false)
 
@@ -17,13 +20,16 @@ const Blog = ({ blog }) => {
   const shownInfo = () => {
     return (
       <>
-        <button onClick={() => setToggle(false)}>Hide</button><br />
+    <button onClick={() => setToggle(false)}>Hide</button><br />
     Url: { blog.url} <br />
     Likes: { blog.likes} <button onClick={() => handleLike()}>Like</button><br />
-    Author: { blog.users.author} <br />
+    Author: { blog.users[0].username} <br />
+    {blog.users[0].username == user.username ? deleteBlog() : null}
       </>
     )
   }
+
+
 
   const handleLike = () => {
 
@@ -45,6 +51,23 @@ const Blog = ({ blog }) => {
       </>
     )
   }
+
+  const deleteBlog = () => {
+    return(
+      <div>
+        <button onClick={e=>handleDelete(e)}>Delete</button>
+      </div>
+    )
+  }
+
+  const handleDelete = event => {
+    event.preventDefault()
+    const input = window.confirm("Do you really want to delete " + blog.title + "?")
+    if (input) {
+      blogService.deleteBlog(blog.id)
+    }
+  }
+
 
   return (
     <div style={blogStyle}>
