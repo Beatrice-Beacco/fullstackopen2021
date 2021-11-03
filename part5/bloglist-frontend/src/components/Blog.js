@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Toggable from './Toggable'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, user }) => {
-
-  console.log(blog);
-  console.log(user);
 
   const [toggle, setToggle] = useState(false)
 
@@ -80,5 +78,11 @@ const Blog = ({ blog, user }) => {
     </div>
   )
 }
+
+Blog.propTypes = {
+  blog: PropTypes.func.isRequired,
+  user: PropTypes.func.isRequired
+}
+
 
 export default Blog
