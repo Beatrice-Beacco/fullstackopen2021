@@ -26,6 +26,7 @@ const Blog = ({ blog }) => {
   }
 
   const handleLike = () => {
+    console.log(blog.id);
 
     const updated = {
       title: blog.title,

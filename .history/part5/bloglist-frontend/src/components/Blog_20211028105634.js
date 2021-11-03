@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Toggable from './Toggable'
-import blogService from '../services/blogs'
 
 const Blog = ({ blog }) => {
 
@@ -14,28 +13,17 @@ const Blog = ({ blog }) => {
     marginBottom: 5
   }
 
+  console.log(blog);
+
   const shownInfo = () => {
     return (
       <>
         <button onClick={() => setToggle(false)}>Hide</button><br />
     Url: { blog.url} <br />
-    Likes: { blog.likes} <button onClick={() => handleLike()}>Like</button><br />
+    Likes: { blog.likes} <button>Like</button><br />
     Author: { blog.users.author} <br />
       </>
     )
-  }
-
-  const handleLike = () => {
-
-    const updated = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: (blog.likes + 1),
-      user: blog.users
-    }
-
-    blogService.update(updated, blog.id)
   }
 
   const toggleInfo = () => {

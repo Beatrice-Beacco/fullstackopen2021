@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Toggable from './Toggable'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, key }) => {
 
   const [toggle, setToggle] = useState(false)
 
@@ -13,6 +13,8 @@ const Blog = ({ blog }) => {
     borderWidth: 1,
     marginBottom: 5
   }
+
+  console.log(blog);
 
   const shownInfo = () => {
     return (
@@ -26,7 +28,6 @@ const Blog = ({ blog }) => {
   }
 
   const handleLike = () => {
-
     const updated = {
       title: blog.title,
       author: blog.author,
@@ -35,7 +36,7 @@ const Blog = ({ blog }) => {
       user: blog.users
     }
 
-    blogService.update(updated, blog.id)
+    blogService.update(updated, key)
   }
 
   const toggleInfo = () => {

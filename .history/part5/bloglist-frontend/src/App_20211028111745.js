@@ -129,7 +129,7 @@ const App = () => {
     )
   }
 
-  const sortedBlogs = blogs.sort((firstItem, secondItem) => secondItem.likes - firstItem.likes);
+  const sortedBlogs = blogs.sort((firstItem, secondItem) => firstItem.likes - secondItem.likes);
 
   //Contitionally renders the helper functions
   return (
