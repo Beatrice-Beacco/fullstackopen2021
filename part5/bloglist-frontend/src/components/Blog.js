@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
-import Toggable from './Toggable'
+import React, { useState } from 'react'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, user }) => {
 
   const [toggle, setToggle] = useState(false)
 
@@ -18,12 +18,15 @@ const Blog = ({ blog }) => {
     return (
       <>
         <button onClick={() => setToggle(false)}>Hide</button><br />
-    Url: { blog.url} <br />
-    Likes: { blog.likes} <button onClick={() => handleLike()}>Like</button><br />
-    Author: { blog.users.author} <br />
+        Url: { blog.url} <br />
+        Likes: { blog.likes} <button onClick={() => handleLike()}>Like</button><br />
+        Author: { blog.users[0].username} <br />
+        {blog.users[0].username === user.username ? deleteBlog() : null}
       </>
     )
   }
+
+
 
   const handleLike = () => {
 
@@ -46,6 +49,23 @@ const Blog = ({ blog }) => {
     )
   }
 
+  const deleteBlog = () => {
+    return(
+      <div>
+        <button onClick={e => handleDelete(e)}>Delete</button>
+      </div>
+    )
+  }
+
+  const handleDelete = event => {
+    event.preventDefault()
+    const input = window.confirm('Do you really want to delete ' + blog.title + '?')
+    if (input) {
+      blogService.deleteBlog(blog.id)
+    }
+  }
+
+
   return (
     <div style={blogStyle}>
       {blog.title} {blog.author}
@@ -57,5 +77,11 @@ const Blog = ({ blog }) => {
     </div>
   )
 }
+
+Blog.propTypes = {
+  blog: PropTypes.func.isRequired,
+  user: PropTypes.func.isRequired
+}
+
 
 export default Blog
