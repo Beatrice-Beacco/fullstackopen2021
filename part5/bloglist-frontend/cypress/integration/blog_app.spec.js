@@ -30,5 +30,20 @@ describe('Blog app', function() {
     })
   })
 
+  describe('Blog app', function() {
+    // ...
+  
+    describe('When logged in', function() {
+      beforeEach(function() {
+        // log in user here
+      })
+  
+      it('A blog can be created', function() {
+        // ...
+      })
+    })
+  
+  })
+
 
 })
