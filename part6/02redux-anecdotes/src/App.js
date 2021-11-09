@@ -1,6 +1,8 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {voteEntry, addNew} from './reducers/anecdoteReducer'
+import NewEntry from './components/NewEntry'
+import Entry from './components/Entry'
 
 const App = () => {
   const anecdotes = useSelector(state => state)
@@ -21,22 +23,15 @@ const App = () => {
   return (
     <div>
       <h2>Anecdotes</h2>
+      
       {anecdotes.map(anecdote =>
-        <div key={anecdote.id}>
-          <div>
-            {anecdote.content}
-          </div>
-          <div>
-            has {anecdote.votes}
-            <button onClick={(e) => vote(e, anecdote.id)}>vote</button>
-          </div>
-        </div>
+        <Entry entry={anecdote} 
+        handleClick={(e) => vote(e, anecdote.id)} />
+         
       )}
-      <h2>create new</h2>
-      <form onSubmit={addEntry}>
-        <div><input name="newEntry"/></div>
-        <button type="submit">create</button>
-      </form>
+
+      <NewEntry handleSubmit={addEntry}/>
+
     </div>
   )
 }
