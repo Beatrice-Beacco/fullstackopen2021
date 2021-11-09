@@ -30,19 +30,23 @@ describe('Blog app', function() {
     })
   })
 
-  describe('Blog app', function() {
-    // ...
-  
-    describe('When logged in', function() {
-      beforeEach(function() {
-        // log in user here
-      })
-  
-      it('A blog can be created', function() {
-        // ...
-      })
+  describe('When logged in', function() {
+    beforeEach(function() {
+    cy.contains('login').click()
+    cy.get('#username').type('Test')
+    cy.get('#password').type('Test')
+    cy.get('#login-button').click()
+    cy.contains('Logged in as')
     })
-  
+
+    it('A blog can be created', function() {
+      cy.contains('Create a new blog').click()
+      cy.get('#title').type('Testblog')
+      cy.get('#author').type('Test')
+      cy.get('#url').type('Test')
+      cy.contains('Submit').click()
+      cy.contains('Testblog')
+    })
   })
 
 
