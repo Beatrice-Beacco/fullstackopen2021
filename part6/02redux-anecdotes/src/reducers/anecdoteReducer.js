@@ -27,14 +27,17 @@ const reducer = (state = initialState, action) => {
 
   switch (action.type) {
     case 'LIKE':
-      const updated = state.map((element) => {
+      const liked = state.map((element) => {
         if (element.id == action.data.id){
           return ({...element, votes: element.votes +1})
         } else {
           return element
         }
       })
-      return updated
+
+      const sorted = liked.sort((firstItem, secondItem) => secondItem.votes - firstItem.votes)
+
+      return sorted
 
       case 'NEW':
         return state.concat(asObject(action.data.content))
