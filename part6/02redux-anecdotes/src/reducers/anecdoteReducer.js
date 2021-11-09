@@ -34,14 +34,14 @@ const reducer = (state = initialState, action) => {
           return element
         }
       })
+      return updated
 
-    return updated
+      case 'NEW':
+        return state.concat(asObject(action.data.content))
 
     default: 
       return state
   }
-
-  return state
 }
 
 export const voteEntry = (id) => {
@@ -49,6 +49,15 @@ export const voteEntry = (id) => {
     type: 'LIKE',
     data: {
       id
+    }
+  }
+}
+
+export const addNew = (entry) => {
+    return{
+    type: 'NEW',
+    data: {
+      content: entry
     }
   }
 }
