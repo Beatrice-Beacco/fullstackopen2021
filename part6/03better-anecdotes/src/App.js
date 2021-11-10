@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {voteEntry, addNew} from './reducers/anecdoteReducer'
+import {addMessage, removeMessage} from './reducers/notificationReducer'
 import NewEntry from './components/NewEntry'
 import Entry from './components/Entry'
 import Notification from './components/Notification'
@@ -9,9 +10,10 @@ const App = () => {
   const anecdotes = useSelector(state => state.anecdotes)
   const dispatch = useDispatch()
 
-  const vote = (event, id) => {
+  const vote = (event, entry) => {
     event.preventDefault()
-    dispatch(voteEntry(id))
+    dispatch(voteEntry(entry.id))
+    dispatch(addMessage("You voted for \"" + entry.content + "\""))
   }
 
   const addEntry = (event) => {
@@ -27,7 +29,7 @@ const App = () => {
       <Notification />
       {anecdotes.map(anecdote =>
         <Entry entry={anecdote} 
-        handleClick={(e) => vote(e, anecdote.id)} />
+        handleClick={(e) => vote(e, anecdote)} />
          
       )}
 
