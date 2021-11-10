@@ -1,34 +1,12 @@
-const anecdotesAtStart = [
-  'If it hurts, do it more often',
-  'Adding manpower to a late software project makes it later!',
-  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-  'Premature optimization is the root of all evil.',
-  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
-]
-
-const getId = () => (100000 * Math.random()).toFixed(0)
-
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
-  }
-}
-
-const initialState = anecdotesAtStart.map(asObject)
+import anecdotesService from '../services/anecdotes'
 
 
-
-const reducer = (state = initialState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
+const reducer = (state = [], action) => {
 
   switch (action.type) {
     case 'LIKE':
       const liked = state.map((element) => {
-        if (element.id == action.data.id){
+        if (element.id == action.data.updated.id){
           return ({...element, votes: element.votes +1})
         } else {
           return element
@@ -39,30 +17,46 @@ const reducer = (state = initialState, action) => {
 
       return sorted
 
-      case 'NEW':
-        return state.concat(asObject(action.data.content))
+    case 'NEW':
+      return state.concat(action.data)
+    
+    case 'INIT':
+      return action.data
 
     default: 
       return state
   }
 }
 
-export const voteEntry = (id) => {
-  return{
-    type: 'LIKE',
-    data: {
-      id
-    }
+export const voteEntry = (entry) => {
+  const updatedEntry = {...entry, votes: entry.votes +1}
+    return async dispatch => {
+    const updated = await anecdotesService.update(entry.id, updatedEntry)
+    dispatch({
+      type: 'LIKE',
+      data: {
+        updated
+      }
+    })
   }
 }
 
-export const addNew = (entry) => {
+export const addNew = (data) => {
     return{
     type: 'NEW',
-    data: {
-      content: entry
+    data
     }
   }
-}
+
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const entries = await anecdotesService.getAll()
+    dispatch({
+      type: 'INIT',
+      data: entries,
+    })
+  }
+ }
+ 
 
 export default reducer
