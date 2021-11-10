@@ -19,8 +19,9 @@ const App = () => {
  
 
   const vote = (event, entry) => {
+    console.log("Entry in vote", entry);
     event.preventDefault()
-    dispatch(voteEntry(entry.id))
+    dispatch(voteEntry(entry))
     dispatch(addMessage("You voted for \"" + entry.content + "\""))
     setTimeout(() => dispatch(removeMessage()), 5000);
   }

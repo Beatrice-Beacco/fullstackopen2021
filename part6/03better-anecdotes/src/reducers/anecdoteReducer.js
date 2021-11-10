@@ -6,7 +6,7 @@ const reducer = (state = [], action) => {
   switch (action.type) {
     case 'LIKE':
       const liked = state.map((element) => {
-        if (element.id == action.data.id){
+        if (element.id == action.data.updated.id){
           return ({...element, votes: element.votes +1})
         } else {
           return element
@@ -28,12 +28,16 @@ const reducer = (state = [], action) => {
   }
 }
 
-export const voteEntry = (id) => {
-  return{
-    type: 'LIKE',
-    data: {
-      id
-    }
+export const voteEntry = (entry) => {
+  const updatedEntry = {...entry, votes: entry.votes +1}
+    return async dispatch => {
+    const updated = await anecdotesService.update(entry.id, updatedEntry)
+    dispatch({
+      type: 'LIKE',
+      data: {
+        updated
+      }
+    })
   }
 }
 
