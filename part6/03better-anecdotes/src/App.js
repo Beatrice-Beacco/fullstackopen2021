@@ -1,16 +1,23 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import {voteEntry, addNew} from './reducers/anecdoteReducer'
+import {voteEntry, addNew, initializeAnecdotes} from './reducers/anecdoteReducer'
 import {addMessage, removeMessage} from './reducers/notificationReducer'
 import NewEntry from './components/NewEntry'
 import Entry from './components/Entry'
 import Notification from './components/Notification'
 import Filter from './components/Filter'
+import anecdotesService from './services/anecdotes'
 
 const App = () => {
   const anecdotes = useSelector(state => state.anecdotes)
   const filter = useSelector(state => state.filter)
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    anecdotesService
+      .getAll().then(anecdotes => dispatch(initializeAnecdotes(anecdotes)))
+  }, [dispatch])
+ 
 
   const vote = (event, entry) => {
     event.preventDefault()
@@ -19,11 +26,13 @@ const App = () => {
     setTimeout(() => dispatch(removeMessage()), 5000);
   }
 
-  const addEntry = (event) => {
+  const addEntry = async (event) => {
     event.preventDefault()
     const content = event.target.newEntry.value
     event.target.newEntry.value = ''
-    dispatch(addNew(content))
+    const newAnecdote = await anecdotesService.createNew(content)
+    console.log(newAnecdote);
+    dispatch(addNew(newAnecdote))
   }
 
   const renderAll = () => {
