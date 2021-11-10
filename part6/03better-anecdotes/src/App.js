@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {voteEntry, addNew, initializeAnecdotes} from './reducers/anecdoteReducer'
-import {addMessage, removeMessage} from './reducers/notificationReducer'
+import {setNotification} from './reducers/notificationReducer'
 import NewEntry from './components/NewEntry'
 import Entry from './components/Entry'
 import Notification from './components/Notification'
@@ -19,11 +19,9 @@ const App = () => {
  
 
   const vote = (event, entry) => {
-    console.log("Entry in vote", entry);
     event.preventDefault()
     dispatch(voteEntry(entry))
-    dispatch(addMessage("You voted for \"" + entry.content + "\""))
-    setTimeout(() => dispatch(removeMessage()), 5000);
+    dispatch(setNotification("You voted for \"" + entry.content + "\"", 5))
   }
 
   const addEntry = async (event) => {

@@ -14,7 +14,6 @@ const createNew = async (content) => {
 }
 
 const update = async (id, entry) => {
-  console.log("Passed entry", entry);
   const response = await axios.put(baseUrl + '/' + id, entry)
   return response.data
 }
