@@ -14,6 +14,7 @@ const App = () => {
     event.preventDefault()
     dispatch(voteEntry(entry.id))
     dispatch(addMessage("You voted for \"" + entry.content + "\""))
+    setTimeout(() => dispatch(removeMessage()), 5000);
   }
 
   const addEntry = (event) => {
