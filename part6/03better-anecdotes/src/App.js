@@ -3,9 +3,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import {voteEntry, addNew} from './reducers/anecdoteReducer'
 import NewEntry from './components/NewEntry'
 import Entry from './components/Entry'
+import Notification from './components/Notification'
 
 const App = () => {
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(state => state.anecdotes)
   const dispatch = useDispatch()
 
   const vote = (event, id) => {
@@ -23,7 +24,7 @@ const App = () => {
   return (
     <div>
       <h2>Anecdotes</h2>
-      
+      <Notification />
       {anecdotes.map(anecdote =>
         <Entry entry={anecdote} 
         handleClick={(e) => vote(e, anecdote.id)} />
