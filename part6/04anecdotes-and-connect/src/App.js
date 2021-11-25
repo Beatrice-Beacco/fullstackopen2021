@@ -46,7 +46,7 @@ const App = () => {
   }
 
   const filterRender = () => {
-    const searched = anecdotes.filter((entry) => entry.content.indexOf(filter) >= 0)
+    const searched = anecdotes.filter((entry) => entry.content.indexOf(filter) > -1)
     console.log("Cercati", searched);
     return(
       <div>
