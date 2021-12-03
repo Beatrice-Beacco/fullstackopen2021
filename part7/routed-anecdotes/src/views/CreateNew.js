@@ -8,8 +8,6 @@ const CreateNew = (props) => {
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
-
-
   
   const history = useHistory()
 
@@ -28,23 +26,31 @@ const CreateNew = (props) => {
     history.push('/')
   }
 
+  const resetFields = (e) => {
+    e.preventDefault()
+    content.clear()
+    author.clear()
+    info.clear()
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input name="content" {...content} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input name="author" {...author} />
         </div>
         <div>
           url for more info
-          <input {...info}/>
+          <input name="info" {...info}/>
         </div>
         <button>create</button>
+        <button onClick={resetFields}>reset</button>
       </form>
     </div>
   )
