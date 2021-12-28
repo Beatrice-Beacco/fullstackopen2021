@@ -3,6 +3,8 @@ const {
   ApolloServerPluginLandingPageGraphQLPlayground
 } = require('apollo-server-core');
 
+const { v4: uuidv4 } = require('uuid');
+
 let authors = [
   {
     name: 'Robert Martin',
@@ -98,8 +100,21 @@ const typeDefs = gql`
   type Query {
       bookCount: Int!,
       authorCount: Int!,
-      allBooks (author: String): [Book!]!,
+      allBooks (author: String, genre: String): [Book!]!,
       allAuthors: [Author!]!
+  }
+  type Mutation {
+      addBook(
+          title: String!,
+          author: String!,
+          published: Int!,
+          genres: [String!]!
+      ): Book,
+
+      editAuthor(
+          name: String!,
+          setBornTo: Int!
+      ): Author
   }
 `
 
@@ -108,12 +123,64 @@ const resolvers = {
       bookCount: () => authors.length,
       authorCount: () => books.length,
       allBooks: (root, args) => {
-          if(!args.author) return books
-          const booksByAuthor = books.filter(book => 
+
+          if(!args.author && !args.genre) return books
+
+          if(args.author && !args.genre){
+            const booksByAuthor = books.filter(book => 
             book.author == args.author)
-          return booksByAuthor
+
+            return booksByAuthor
+          }
+
+          if(!args.author && args.genre){
+            const booksByGenre = books.filter(book => 
+            book.genres.find(genre => genre == args.genre))
+
+            return booksByGenre
+          }
+          
+          const booksByAuthorAndGenre = books.filter(book =>
+            book.author == args.author 
+            && book.genres.find(genre => genre == args.genre))
+
+          return booksByAuthorAndGenre
+
         },
       allAuthors: () => authors
+  },
+
+  Mutation: {
+      addBook: (root, args) => {
+          const book = {...args, id: uuidv4()}
+          books = books.concat(book)
+
+          const authorExists = authors.find(author => author.name == args.author)
+          if (!authorExists) {
+              authors = authors.concat({name: args.author, id:uuidv4(), born: null})
+          }
+          
+          return book 
+      },
+
+      editAuthor: (root, args) => {
+          const foundAuthor = authors.find(author => author.name == args.name)
+
+          if(!foundAuthor) return null
+
+          let editedAuthor
+
+          authors = authors.map(author => {
+            if(author.name == args.name){
+                editedAuthor = {...author, born: args.setBornTo}
+                return editedAuthor
+            } else {
+                return author
+            }    
+            })
+
+            return editedAuthor
+      }
   },
 
   Author: {
