@@ -1,5 +1,17 @@
 .vscode
 
 #Ignore node modules
-part4/04bloglist_expansion/node_modules
-part7\routed-anecdotes\node_modules
+part1/01courseinfo/node_modules
+part1/02unicafe/node_modules
+part1/03anecdotes/node_modules
+
+part2/01courseinfo2/node_modules
+part2/02phonebook/node_modules
+
+part3/01phonebook_backend/node_modules
+
+part4/02unit_tests/node_modules
+
+part7/routed-anecdotes/node_modules
+
+part8/01graph-ql/node_modules
