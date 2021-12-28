@@ -3,6 +3,8 @@ const {
   ApolloServerPluginLandingPageGraphQLPlayground
 } = require('apollo-server-core');
 
+const { v4: uuidv4 } = require('uuid');
+
 let authors = [
   {
     name: 'Robert Martin',
@@ -101,6 +103,14 @@ const typeDefs = gql`
       allBooks (author: String, genre: String): [Book!]!,
       allAuthors: [Author!]!
   }
+  type Mutation {
+      addBook(
+          title: String!,
+          author: String!,
+          published: Int!,
+          genres: [String!]!
+      ): Book
+  }
 `
 
 const resolvers = {
@@ -133,6 +143,20 @@ const resolvers = {
 
         },
       allAuthors: () => authors
+  },
+
+  Mutation: {
+      addBook: (root, args) => {
+          const book = {...args, id: uuidv4()}
+          books = books.concat(book)
+
+          const authorExists = authors.find(author => author.name == args.author)
+          if (!authorExists) {
+              authors = authors.concat({name: args.author, id:uuidv4(), born: null})
+          }
+          
+          return book 
+      }
   },
 
   Author: {
