@@ -1,5 +1,7 @@
 import React from "react";
-import { gql, useMutation } from "@apollo/client";
+import Select from "react-select";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { useState } from "react";
 
 const UPDATE_BIRTH = gql`
   mutation setBirthYear(
@@ -16,18 +18,25 @@ const UPDATE_BIRTH = gql`
   }
 `;
 
-const BirthForm = () => {
 
-    const [setBirthYear] = useMutation(UPDATE_BIRTH);
+const BirthForm = ({allAuthorsQuery, authorNames}) => {
+
+    const [selectedOption, setSelectedOption] = useState(null);
+
+    const [setBirthYear] = useMutation(UPDATE_BIRTH, {
+    refetchQueries: [  {query: allAuthorsQuery } ],
+    onError: (error) => {
+      console.log(error);
+    }   
+    })
 
    const handleSubmit = (event) => {
         event.preventDefault();
-        const name = event.target.name.value
         const setBornTo = parseInt(event.target.born.value)
 
         setBirthYear({
             variables: { 
-                name, 
+                name: selectedOption.value, 
                 setBornTo
             },
         });
@@ -37,7 +46,12 @@ const BirthForm = () => {
     <div>
       <h2>Set birthyear</h2>
       <form onSubmit={handleSubmit}>
-        Author name: <input name="name" type="text" />
+        Author name:
+        <Select
+          defaultValue={selectedOption}
+          onChange={setSelectedOption}
+          options={authorNames}
+        />
         <br />
         Birth year: <input name="born" type="number" />
         <br />

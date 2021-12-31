@@ -1,5 +1,5 @@
   
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { gql, useQuery } from '@apollo/client'
 import BirthForm from './BirthForm'
 
@@ -25,6 +25,10 @@ const Authors = (props) => {
     return <div>loading...</div>
   }
 
+  const onlyNames = result.data.allAuthors.map((author) => (
+  {value: author.name, label: author.name}
+  ));
+
   return (
     <div>
       <h2>Authors</h2>
@@ -32,25 +36,24 @@ const Authors = (props) => {
         <tbody>
           <tr>
             <th></th>
-            <th>
-              Born
-            </th>
-            <th>
-              Books
-            </th>
+            <th>Born</th>
+            <th>Books</th>
           </tr>
-          {result.data.allAuthors.map(author =>
+          {result.data.allAuthors.map((author) => (
             <tr key={author.name}>
               <td>{author.name}</td>
               <td>{author.born}</td>
               <td>{author.bookCount}</td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
-      <BirthForm/>
+      <BirthForm
+        allAuthorsQuery={ALL_AUTHORS}
+        authorNames = {onlyNames}
+      />
     </div>
-  )
+  );
 }
 
 export default Authors
