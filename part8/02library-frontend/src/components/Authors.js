@@ -1,6 +1,7 @@
   
 import React from 'react'
 import { gql, useQuery } from '@apollo/client'
+import BirthForm from './BirthForm'
 
 const ALL_AUTHORS = gql`
 query {
@@ -26,16 +27,16 @@ const Authors = (props) => {
 
   return (
     <div>
-      <h2>authors</h2>
+      <h2>Authors</h2>
       <table>
         <tbody>
           <tr>
             <th></th>
             <th>
-              born
+              Born
             </th>
             <th>
-              books
+              Books
             </th>
           </tr>
           {result.data.allAuthors.map(author =>
@@ -47,7 +48,7 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-
+      <BirthForm/>
     </div>
   )
 }
