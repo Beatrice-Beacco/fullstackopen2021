@@ -152,6 +152,7 @@ const resolvers = {
 
   Mutation: {
       addBook: (root, args) => {
+
           const book = {...args, id: uuidv4()}
           books = books.concat(book)
 
