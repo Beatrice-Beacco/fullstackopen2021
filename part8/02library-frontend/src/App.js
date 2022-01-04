@@ -58,8 +58,6 @@ const App = () => {
         show={page === 'login'}
         tokenHandler= {setToken}
       />
-
-
     </div>
   )
 }
