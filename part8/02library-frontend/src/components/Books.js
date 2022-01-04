@@ -3,33 +3,9 @@ import { gql, useQuery, useLazyQuery } from '@apollo/client'
 
 import Genres from './Genres'
 
-const ALL_BOOKS = gql`
-query {
-  allBooks {
-    title
-    author {
-      name
-      born
-    }
-    published
-    genres
-  }
-}
-`
+import { ALL_BOOKS } from '../queries';
+import { BOOKS_BY_GENRE } from '../queries';
 
-const BOOKS_BY_GENRE = gql`
-  query booksByGenre ($genre: String) {
-    allBooks(genre: $genre) {
-      title
-      author {
-        name
-        born
-      }
-      published
-      genres
-    }
-  }
-`;
 
 const Books = (props) => {
 
@@ -38,23 +14,16 @@ const Books = (props) => {
   const [currentGenre, setCurrentGenre] = useState(null);
   const [bookList, setBookList] = useState([]);
 
-  console.log('Variabile currentGenre: ',currentGenre);
-  console.log('Variabile bookList: ',bookList);
-
   useEffect(() => {
     if(result.data){
-      console.log(result.data);
       setBookList(result.data.allBooks)
     }
   }, [result.data]); 
 
   useEffect(() => {
-    console.log(resultBooksByGenre);
     getBooksByGenre({ variables: { genre: currentGenre } });
     if(resultBooksByGenre.data){
-    console.log(resultBooksByGenre);
     setBookList(resultBooksByGenre.data.allBooks);
-    console.log(bookList);
     }
   }, [resultBooksByGenre.data, currentGenre]);
 

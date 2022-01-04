@@ -1,13 +1,7 @@
 import React, {useEffect} from 'react'
 import { gql, useMutation } from "@apollo/client";
 
-const LOGIN = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      value
-    }
-  }
-`;
+import {LOGIN} from '../queries'
 
 
 const Login = ({show, tokenHandler}) => {

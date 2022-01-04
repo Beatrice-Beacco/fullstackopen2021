@@ -12,9 +12,9 @@ const Genres = ({books, genreHandler}) => {
 
     return(
         <div>
-        {genresArray.map(genre => <button key={genre} onClick={()=> {
-            console.log('Cliccato ', genre)
-            genreHandler(genre)}}>{genre}</button>)}
+        {genresArray.map(genre => <button key={genre} onClick={()=> genreHandler(genre)}>
+        {genre}
+        </button>)}
         <button key="all" onClick={()=> genreHandler(null)}>All</button>
         </div>
     )

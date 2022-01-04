@@ -3,15 +3,7 @@ import React from 'react'
 import { gql, useQuery } from '@apollo/client'
 import BirthForm from './BirthForm'
 
-const ALL_AUTHORS = gql`
-query {
-  allAuthors {
-    name
-		born
-    bookCount
-  }
-}
-`
+import { ALL_AUTHORS } from '../queries'
 
 const Authors = (props) => {
 

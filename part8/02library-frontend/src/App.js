@@ -6,12 +6,20 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Login from './components/Login'
+import { useEffect } from 'react';
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null);
 
   const client = useApolloClient();
+
+  useEffect(() => {
+    const checkIfTokenExists = localStorage.getItem("phonenumbers-user-token");
+    if (checkIfTokenExists) {
+      setToken(checkIfTokenExists)
+    }
+  },[])
 
   const loginButton = () => (
     <>
