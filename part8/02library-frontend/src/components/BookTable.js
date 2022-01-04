@@ -1,6 +1,9 @@
 import React from 'react';
 
 const BookTable = ({books}) => {
+
+    if(!books) return null
+
     return (
       <table>
         <tbody>

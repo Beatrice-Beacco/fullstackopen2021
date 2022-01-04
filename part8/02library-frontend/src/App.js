@@ -5,6 +5,7 @@ import {useApolloClient } from "@apollo/client";
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
+import Recommended from './components/Recommended'
 import Login from './components/Login'
 import { useEffect } from 'react';
 
@@ -29,6 +30,7 @@ const App = () => {
   const loggedUserDisplayButtons = () => (
     <>
     <button onClick={() => setPage("add")}>Add Book</button>
+    <button onClick={() => setPage("recoms")}>Reccommended</button>
     <button onClick={() => logoutAction()}>Logout</button>
     </>
   );
@@ -60,7 +62,11 @@ const App = () => {
 
       <NewBook
         show={page === 'add'}
-      />      
+      /> 
+
+      <Recommended 
+        show={page === 'recoms'}
+      />     
       
       <Login
         show={page === 'login'}
