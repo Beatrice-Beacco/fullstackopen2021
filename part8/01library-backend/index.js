@@ -53,7 +53,7 @@ const typeDefs = gql`
     authorCount: Int!
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
-    me: String
+    me: User!
   }
   type Mutation {
     addBook(
@@ -106,7 +106,7 @@ const resolvers = {
     },
 
     me: (root, args, context) => {
-      return context.currentUser.username;
+      return context.currentUser
     },
   },
 

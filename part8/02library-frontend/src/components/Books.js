@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react'
-import { gql, useQuery, useLazyQuery } from '@apollo/client'
+import {useQuery, useLazyQuery } from '@apollo/client'
 
 import Genres from './Genres'
+import BookTable from './BookTable'
 
-import { ALL_BOOKS } from '../queries';
-import { BOOKS_BY_GENRE } from '../queries';
+import { ALL_BOOKS, BOOKS_BY_GENRE } from '../queries';
 
 
 const Books = (props) => {
@@ -39,26 +39,7 @@ const Books = (props) => {
     <div>
       <h2>Books</h2>
 
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>
-              Author
-            </th>
-            <th>
-              Published
-            </th>
-          </tr>
-          {bookList.map(a =>
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <BookTable books={bookList} />
 
       <Genres books={result.data.allBooks} genreHandler={setCurrentGenre}/> 
     </div>
