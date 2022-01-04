@@ -1,5 +1,5 @@
   
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import { gql, useQuery } from '@apollo/client'
 import BirthForm from './BirthForm'
 
