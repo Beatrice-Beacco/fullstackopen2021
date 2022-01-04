@@ -138,7 +138,7 @@ const resolvers = {
           });
         }
       }
-      return newBook;
+      return newBook.populate('author');
     },
 
     editAuthor: async (root, args) => {

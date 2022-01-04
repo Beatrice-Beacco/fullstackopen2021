@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql} from "@apollo/client";
 
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
@@ -55,3 +55,26 @@ export const ME = gql`
   }
 `;
 
+export const CREATE_BOOK = gql`
+  mutation createBook(
+    $title: String!
+    $author: String!
+    $publishedNumber: Int!
+    $genres: [String!]!
+  ) {
+    addBook(
+      title: $title
+      author: $author
+      published: $publishedNumber
+      genres: $genres
+    ) {
+      title
+      author {
+        name
+        born
+      }
+      published
+      genres
+    }
+  }
+`;

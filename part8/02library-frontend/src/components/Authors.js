@@ -1,6 +1,6 @@
   
 import React from 'react'
-import { gql, useQuery } from '@apollo/client'
+import {useQuery } from '@apollo/client'
 import BirthForm from './BirthForm'
 
 import { ALL_AUTHORS } from '../queries'
