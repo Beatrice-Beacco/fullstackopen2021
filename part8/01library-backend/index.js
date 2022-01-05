@@ -112,7 +112,30 @@ const resolvers = {
 
   Mutation: {
     addBook: async (root, args) => {
-      const book = new Book({ ...args });
+
+      let bookAuthor
+
+      const author = await Author.findOne({ name: args.author });
+
+      if (!author) {
+        const newAuthor = new Author({
+          name: args.author,
+          born: null,
+        });
+
+        try {
+          await newAuthor.save();
+          bookAuthor = newAuthor
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          });
+        }
+      } else {
+        bookAuthor = author
+      }
+      
+      const book = new Book({title: args.title, published: args.published, genres:args.genres, author: bookAuthor});
 
       let newBook;
       try {
@@ -123,21 +146,7 @@ const resolvers = {
         });
       }
 
-      const authorExists = await Author.findOne({ name: args.author });
-      if (!authorExists) {
-        const newAuthor = new Author({
-          name: args.author,
-          born: null,
-        });
 
-        try {
-          await newAuthor.save();
-        } catch (error) {
-          throw new UserInputError(error.message, {
-            invalidArgs: args,
-          });
-        }
-      }
       return newBook.populate('author');
     },
 
