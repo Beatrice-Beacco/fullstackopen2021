@@ -15,6 +15,8 @@ const Author = require("./models/author");
 const Book = require("./models/book");
 const User = require("./models/user");
 
+const { bookLoader } = require("./loaders");
+
 const MONGODB_URI =
   "mongodb+srv://user:fullstack@cluster0.fkwh6.mongodb.net/library?retryWrites=true&w=majority";
 
@@ -219,10 +221,13 @@ const resolvers = {
   },
 
   Author: {
-    bookCount: async (root, args) => {
+    bookCount: ({ _id }, _args, { loaders }) => {
+      return loaders.bookLoader.load(_id);
+    },
+    /*     bookCount: async (root, args) => {
       const writtenBooks = await Book.find({ author: root._id });
       return writtenBooks.length;
-    },
+    }, */
   },
 };
 
@@ -234,7 +239,12 @@ const server = new ApolloServer({
     if (auth && auth.toLowerCase().startsWith("bearer ")) {
       const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET);
       const currentUser = await User.findById(decodedToken.id);
-      return { currentUser };
+      return {
+        currentUser,
+        loaders: {
+          bookLoader, //add loader
+        },
+      };
     }
   },
   subscriptions: {
