@@ -1,4 +1,5 @@
 .vscode
+.history
 
 #Ignore node modules
 part1/01courseinfo/node_modules

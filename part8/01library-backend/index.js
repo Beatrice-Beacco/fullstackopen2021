@@ -5,7 +5,10 @@ const {
 
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = "supersecret"
+const JWT_SECRET = "supersecret";
+
+const { PubSub } = require("graphql-subscriptions");
+const pubsub = new PubSub();
 
 const mongoose = require("mongoose");
 const Author = require("./models/author");
@@ -13,7 +16,7 @@ const Book = require("./models/book");
 const User = require("./models/user");
 
 const MONGODB_URI =
-  'mongodb+srv://user:fullstack@cluster0.fkwh6.mongodb.net/library?retryWrites=true&w=majority';
+  "mongodb+srv://user:fullstack@cluster0.fkwh6.mongodb.net/library?retryWrites=true&w=majority";
 
 console.log("connecting to", MONGODB_URI);
 
@@ -69,6 +72,9 @@ const typeDefs = gql`
 
     login(username: String!, password: String!): Token
   }
+  type Subscription {
+    bookAdded: Book!
+  }
 `;
 
 const resolvers = {
@@ -82,13 +88,17 @@ const resolvers = {
       }
 
       if (args.author && !args.genre) {
-        const booksByAuthor = await Book.find({ author: args.author }).populate("author");
+        const booksByAuthor = await Book.find({ author: args.author }).populate(
+          "author"
+        );
 
         return booksByAuthor;
       }
 
       if (!args.author && args.genre) {
-        const booksByGenre = await Book.find({ genres: args.genre }).populate("author");
+        const booksByGenre = await Book.find({ genres: args.genre }).populate(
+          "author"
+        );
 
         return booksByGenre;
       }
@@ -101,19 +111,18 @@ const resolvers = {
       return booksByAuthorAndGenre;
     },
     allAuthors: async () => {
-      const authors = await Author.find({})
-      return authors
+      const authors = await Author.find({});
+      return authors;
     },
 
     me: (root, args, context) => {
-      return context.currentUser
+      return context.currentUser;
     },
   },
 
   Mutation: {
     addBook: async (root, args) => {
-
-      let bookAuthor
+      let bookAuthor;
 
       const author = await Author.findOne({ name: args.author });
 
@@ -125,17 +134,22 @@ const resolvers = {
 
         try {
           await newAuthor.save();
-          bookAuthor = newAuthor
+          bookAuthor = newAuthor;
         } catch (error) {
           throw new UserInputError(error.message, {
             invalidArgs: args,
           });
         }
       } else {
-        bookAuthor = author
+        bookAuthor = author;
       }
-      
-      const book = new Book({title: args.title, published: args.published, genres:args.genres, author: bookAuthor});
+
+      const book = new Book({
+        title: args.title,
+        published: args.published,
+        genres: args.genres,
+        author: bookAuthor,
+      });
 
       let newBook;
       try {
@@ -146,8 +160,9 @@ const resolvers = {
         });
       }
 
+      pubsub.publish("BOOK_ADDED", { bookAdded: newBook }); //emette PERSON_ADDED
 
-      return newBook.populate('author');
+      return newBook.populate("author");
     },
 
     editAuthor: async (root, args) => {
@@ -172,7 +187,7 @@ const resolvers = {
     },
 
     createUser: (root, args) => {
-      const user = new User({...args});
+      const user = new User({ ...args });
 
       return user.save().catch((error) => {
         throw new UserInputError(error.message, {
@@ -197,6 +212,12 @@ const resolvers = {
     },
   },
 
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(["BOOK_ADDED"]), //ascolta per l'emissione di BOOK_ADDED
+    },
+  },
+
   Author: {
     bookCount: async (root, args) => {
       const writtenBooks = await Book.find({ author: root._id });
@@ -216,9 +237,13 @@ const server = new ApolloServer({
       return { currentUser };
     }
   },
+  subscriptions: {
+    path: "/",
+  },
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 });
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`Server ready at ${url}`);
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`);
 });
