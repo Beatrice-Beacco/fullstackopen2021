@@ -17,13 +17,12 @@ const User = require("./models/user");
 
 const { bookLoader } = require("./loaders");
 
-const MONGODB_URI =
-  "mongodb+srv://user:fullstack@cluster0.fkwh6.mongodb.net/library?retryWrites=true&w=majority";
+const config = require("./config");
 
-console.log("connecting to", MONGODB_URI);
+console.log("connecting to", config.mongoUrl);
 
 mongoose
-  .connect(MONGODB_URI)
+  .connect(config.mongoUrl)
   .then(() => {
     console.log("connected to MongoDB");
   })
