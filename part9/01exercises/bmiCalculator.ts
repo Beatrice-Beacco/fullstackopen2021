@@ -22,7 +22,7 @@ const calculateBmi = (height: number, weight: number): string => {
   const floatHeight = height / 100;
   const bmi = weight / (floatHeight * floatHeight);
 
-  let result: string = "";
+  let result = "";
 
   switch (true) {
     case bmi < 16.0:
