@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node index.ts",
+    "dev": "ts-node-dev index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "calculateBmi": "ts-node bmiCalculator.ts",
     "calculateExercises": "ts-node exerciseCalculator.ts"
@@ -11,6 +13,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^17.0.8"
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.8",
+    "ts-node-dev": "^1.1.8"
+  },
+  "dependencies": {
+    "express": "^4.17.2"
   }
 }

@@ -22,24 +22,36 @@ const calculateBmi = (height: number, weight: number): string => {
   const floatHeight = height / 100;
   const bmi = weight / (floatHeight * floatHeight);
 
+  let result: string = "";
+
   switch (true) {
     case bmi < 16.0:
-      return "Underweight (Severe thinness)";
+      result = "Underweight (Severe thinness)";
+      break;
     case bmi > 16.0 && bmi <= 16.9:
-      return "Underweight (Moderate thinness)";
+      result = "Underweight (Moderate thinness)";
+      break;
     case bmi >= 17.0 && bmi <= 18.4:
-      return "Underweight (Mild thinness)";
+      result = "Underweight (Mild thinness)";
+      break;
     case bmi >= 18.5 && bmi <= 24.9:
-      return "Normal range";
+      result = "Normal range";
+      break;
     case bmi >= 25.0 && bmi <= 29.9:
-      return "Overweight (Pre-obese)";
+      result = "Overweight (Pre-obese)";
+      break;
     case bmi >= 30.0 && bmi <= 34.9:
-      return "Obese (Class I)";
+      result = "Obese (Class I)";
+      break;
     case bmi >= 35.0 && bmi <= 39.9:
-      return "Obese (Class II)";
+      result = "Obese (Class II)";
+      break;
     case bmi >= 40:
-      return "Obese (Class III)";
+      result = "Obese (Class III)";
+      break;
   }
+
+  return result;
 };
 
 try {
