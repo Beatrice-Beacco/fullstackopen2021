@@ -1,5 +1,4 @@
 import express from "express";
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const bodyParser = require("body-parser");
 const app = express();
 
