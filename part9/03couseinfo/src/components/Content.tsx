@@ -1,17 +1,18 @@
 import React from "react";
-import { PartInfo } from "../types";
+import { CoursePart } from "../types";
+import Part from "./Part";
 
 export default function Content({
   courseData,
 }: {
-  courseData: PartInfo[];
+  courseData: CoursePart[];
 }): JSX.Element {
   return (
     <div>
       {courseData.map((part) => {
         return (
-          <p>
-            {part.name} {part.exerciseCount}
+          <p key={part.name}>
+            <Part part={part} />
           </p>
         );
       })}

@@ -1,7 +1,7 @@
 import React from "react";
-import { PartInfo } from "../types";
+import { CoursePart } from "../types";
 
-export default function Total({ parts }: { parts: PartInfo[] }): JSX.Element {
+export default function Total({ parts }: { parts: CoursePart[] }): JSX.Element {
   return (
     <div>
       <p>
