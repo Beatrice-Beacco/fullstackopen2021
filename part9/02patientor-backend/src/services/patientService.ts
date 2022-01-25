@@ -10,7 +10,7 @@ export const getEntries = (): Array<Patient> => {
   return patientData;
 };
 
-export const getNonSensitiveEntries = (): Array<NonSensitivePatient> => {
+export const getNonSensitiveEntries = (): NonSensitivePatient[] => {
   return patientData.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,
@@ -18,6 +18,10 @@ export const getNonSensitiveEntries = (): Array<NonSensitivePatient> => {
     gender,
     occupation,
   }));
+};
+
+export const getSinglePatient = (id: string): Patient | undefined => {
+  return patientData.find((patient) => patient.id == id);
 };
 
 export const addPatient = (inputPatient: NewPatient): Patient => {
