@@ -60,6 +60,7 @@ const parseNewPatient = ({
     dateOfBirth: parseDate(dateOfBirth),
     occupation: parseString(occupation),
     gender: parseGender(gender),
+    entries: [],
   };
 
   return parsedNewEntry;
